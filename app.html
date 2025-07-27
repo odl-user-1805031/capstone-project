@@ -3,169 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculator App</title>
+    <title>Hello Kitty Calculator</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #f4f4f4;
+            background-color: #ffe4f0; /* Hello Kitty Pink */
+            background-image: url('https://via.placeholder.com/800'); /* Replace with a Hello Kitty pattern/image */
+            background-size: cover;
+            background-repeat: no-repeat;
         }
-        .calculator {
-            width: 320px;
-            background: #fff;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-        }
-        .screen {
+
+        .calculator-container {
+            text-align: center;
+            max-width: 450px;
             width: 100%;
-            padding: 20px;
-            background: #f9f9f9;
-            font-size: 2rem;
-            text-align: right;
-            border-bottom: 1px solid #ccc;
         }
+
+        h1 {
+            color: #ff69b4;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .calculator {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            position: relative;
+        }
+
+        .calculator-screen {
+            background-color: #f8bbd0;
+            color: black;
+            height: 60px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            border: solid 2px white;
+        }
+
         .buttons {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 10px;
-            padding: 10px;
         }
-        button {
-            padding: 20px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            background: #eef;
+
+        .btn {
+            background-color: #ff99cc;
+            color: white;
+            font-size: 1.25rem;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
+            padding: 15px;
             cursor: pointer;
-            transition: background 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.2s, transform 0.2s;
         }
-        button:hover {
-            background: #cdd;
+
+        .btn:hover {
+            background-color: #ff69b4;
+            transform: scale(1.05);
         }
-        button.operation {
-            color: white;
-            background: #3498db;
+
+        .operator {
+            background-color: #ffc1e3;
         }
-        button.operation:hover {
-            background: #2980b9;
+
+        .operator:hover {
+            background-color: #ff69b4;
         }
-        button.clear {
-            background: #e74c3c;
-            color: white;
+
+        .equals {
+            grid-column: span 4;
+            background-color: #fe77cc;
         }
-        button.clear:hover {
-            background: #c0392b;
+
+        .equals:hover {
+            background-color: #ff4081;
         }
     </style>
 </head>
 <body>
-    <div class="calculator">
-        <div id="screen" class="screen">0</div>
-        <div class="buttons">
-            <button onclick="clearScreen()" class="clear">C</button>
-            <button disabled></button>
-            <button disabled></button>
-            <button onclick="pressOperation('/')" class="operation">÷</button>
+    <div class="calculator-container">
+        <h1>Hello Kitty Calculator</h1>
+        <div class="calculator">
+            <div class="calculator-screen">
+                <div id="result"></div>
+            </div>
+            <div class="buttons">
+                <!-- Number Buttons -->
+                <button class="btn" onclick="appendNumber(1)">1</button>
+                <button class="btn" onclick="appendNumber(2)">2</button>
+                <button class="btn" onclick="appendNumber(3)">3</button>
+                <button class="btn operator" onclick="setOperator('+')">+</button>
 
-            <button onclick="pressNumber(7)">7</button>
-            <button onclick="pressNumber(8)">8</button>
-            <button onclick="pressNumber(9)">9</button>
-            <button onclick="pressOperation('*')" class="operation">×</button>
+                <button class="btn" onclick="appendNumber(4)">4</button>
+                <button class="btn" onclick="appendNumber(5)">5</button>
+                <button class="btn" onclick="appendNumber(6)">6</button>
+                <button class="btn operator" onclick="setOperator('-')">−</button>
 
-            <button onclick="pressNumber(4)">4</button>
-            <button onclick="pressNumber(5)">5</button>
-            <button onclick="pressNumber(6)">6</button>
-            <button onclick="pressOperation('-')" class="operation">−</button>
+                <button class="btn" onclick="appendNumber(7)">7</button>
+                <button class="btn" onclick="appendNumber(8)">8</button>
+                <button class="btn" onclick="appendNumber(9)">9</button>
+                <button class="btn operator" onclick="setOperator('*')">×</button>
 
-            <button onclick="pressNumber(1)">1</button>
-            <button onclick="pressNumber(2)">2</button>
-            <button onclick="pressNumber(3)">3</button>
-            <button onclick="pressOperation('+')" class="operation">+</button>
+                <button class="btn" onclick="appendNumber(0)">0</button>
+                <button class="btn" onclick="clearScreen()">C</button>
+                <button class="btn" onclick="backspace()">←</button>
+                <button class="btn operator" onclick="setOperator('/')">÷</button>
 
-            <button onclick="pressNumber(0)">0</button>
-            <button onclick="pressDecimal()">.</button>
-            <button onclick="calculate()" class="operation">=</button>
+                <!-- Equals Button -->
+                <button class="btn equals" onclick="calculate()">=</button>
+            </div>
         </div>
     </div>
     <script>
-        let currentInput = '0'; // This is the current input displayed on the screen
-        let previousInput = null; // Stores the previous number
-        let operation = null; // Stores the current operation
+        let currentNumber = '';
+        let previousNumber = '';
+        let currentOperator = null;
 
-        function updateScreen() {
-            const screen = document.getElementById('screen');
-            screen.textContent = currentInput;
+        function appendNumber(number) {
+            currentNumber += number;
+            updateScreen(currentNumber);
         }
 
-        function pressNumber(num) {
-            if (currentInput === '0') {
-                currentInput = String(num);
-            } else {
-                currentInput += String(num);
+        function setOperator(operator) {
+            if (currentNumber === '') return;
+            if (previousNumber !== '') {
+                calculate();
             }
-            updateScreen();
-        }
-
-        function pressDecimal() {
-            if (!currentInput.includes('.')) {
-                currentInput += '.';
-            }
-            updateScreen();
-        }
-
-        function pressOperation(op) {
-            if (operation) {
-                calculate(); // Perform the pending calculation before starting a new operation
-            }
-            previousInput = currentInput;
-            currentInput = '0';
-            operation = op;
+            currentOperator = operator;
+            previousNumber = currentNumber;
+            currentNumber = '';
+            updateScreen('');
         }
 
         function calculate() {
-            if (!operation || previousInput === null) return;
+            let computation;
+            const prev = parseFloat(previousNumber);
+            const current = parseFloat(currentNumber);
+            if (isNaN(prev) || isNaN(current)) return;
 
-            const num1 = parseFloat(previousInput);
-            const num2 = parseFloat(currentInput);
-            let result = 0;
-
-            switch (operation) {
+            switch (currentOperator) {
                 case '+':
-                    result = num1 + num2;
+                    computation = prev + current;
                     break;
                 case '-':
-                    result = num1 - num2;
+                    computation = prev - current;
                     break;
                 case '*':
-                    result = num1 * num2;
+                    computation = prev * current;
                     break;
                 case '/':
-                    if (num2 === 0) {
-                        alert('Cannot divide by zero');
-                        clearScreen();
-                        return;
+                    if (current === 0) {
+                        computation = 'Error: Divide by 0';
+                    } else {
+                        computation = prev / current;
                     }
-                    result = num1 / num2;
                     break;
+                default:
+                    return;
             }
 
-            currentInput = result.toFixed(4).replace(/\.?0+$/g, ''); // Remove trailing zeroes
-            operation = null;
-            previousInput = null;
-            updateScreen();
+            currentNumber = computation.toString();
+            currentOperator = null;
+            previousNumber = '';
+            updateScreen(currentNumber);
+        }
+
+        function updateScreen(value) {
+            document.getElementById('result').textContent = value;
         }
 
         function clearScreen() {
-            currentInput = '0';
-            previousInput = null;
-            operation = null;
-            updateScreen();
+            currentNumber = '';
+            previousNumber = '';
+            currentOperator = null;
+            updateScreen('');
+        }
+
+        function backspace() {
+            currentNumber = currentNumber.slice(0, -1);
+            updateScreen(currentNumber);
         }
     </script>
 </body>
