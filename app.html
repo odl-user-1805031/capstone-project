@@ -3,201 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello Kitty Calculator</title>
+    <title>Sky Blue Calculator</title>
     <style>
+        /* General Styling */
         body {
-            font-family: 'Arial', sans-serif;
+            margin: 0;
+            font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
-            background-color: #ffe4f0; /* Hello Kitty Pink */
-            background-image: url('https://via.placeholder.com/800'); /* Replace with a Hello Kitty pattern/image */
-            background-size: cover;
-            background-repeat: no-repeat;
-        }
-
-        .calculator-container {
-            text-align: center;
-            max-width: 450px;
-            width: 100%;
-        }
-
-        h1 {
-            color: #ff69b4;
-            font-size: 2rem;
-            margin-bottom: 20px;
+            background: linear-gradient(to bottom, #87CEEB, #E0FFFF);
         }
 
         .calculator {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            padding: 20px;
-            position: relative;
+            width: 300px;
+            background-color: #f0f8ff;
+            border-radius: 15px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
         }
 
-        .calculator-screen {
-            background-color: #f8bbd0;
-            color: black;
-            height: 60px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+        /* Display Screen */
+        .screen {
+            background-color: #d6efff;
+            height: 80px;
             display: flex;
             justify-content: flex-end;
             align-items: center;
-            padding: 0 10px;
-            font-size: 1.5rem;
-            font-weight: bold;
-            white-space: nowrap;
-            overflow: hidden;
-            border: solid 2px white;
+            padding: 10px;
+            font-size: 2rem;
+            border-bottom: 2px solid #87CEEB;
+            color: #000;
+            word-wrap: break-word;
         }
 
+        /* Buttons Grid */
         .buttons {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+            gap: 5px;
+            padding: 10px;
         }
 
-        .btn {
-            background-color: #ff99cc;
-            color: white;
-            font-size: 1.25rem;
+        button {
+            height: 60px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #fff;
+            background-color: #87CEEB;
             border: none;
-            border-radius: 10px;
-            padding: 15px;
+            border-radius: 5px;
             cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.2s, transform 0.2s;
+            transition: background-color 0.2s ease;
         }
 
-        .btn:hover {
-            background-color: #ff69b4;
-            transform: scale(1.05);
+        /* AC and Equal Buttons */
+        .clear { background-color: #FF6347; }
+        .equals { background-color: #4682B4; }
+
+        button:hover {
+            background-color: #6495ED;
         }
 
-        .operator {
-            background-color: #ffc1e3;
-        }
-
-        .operator:hover {
-            background-color: #ff69b4;
-        }
-
-        .equals {
-            grid-column: span 4;
-            background-color: #fe77cc;
-        }
-
-        .equals:hover {
-            background-color: #ff4081;
+        /* Button Active State */
+        button:active {
+            transform: scale(0.98);
         }
     </style>
 </head>
 <body>
-    <div class="calculator-container">
-        <h1>Hello Kitty Calculator</h1>
-        <div class="calculator">
-            <div class="calculator-screen">
-                <div id="result"></div>
-            </div>
-            <div class="buttons">
-                <!-- Number Buttons -->
-                <button class="btn" onclick="appendNumber(1)">1</button>
-                <button class="btn" onclick="appendNumber(2)">2</button>
-                <button class="btn" onclick="appendNumber(3)">3</button>
-                <button class="btn operator" onclick="setOperator('+')">+</button>
+    <div class="calculator">
+        <!-- Screen -->
+        <div class="screen" id="screen">0</div>
 
-                <button class="btn" onclick="appendNumber(4)">4</button>
-                <button class="btn" onclick="appendNumber(5)">5</button>
-                <button class="btn" onclick="appendNumber(6)">6</button>
-                <button class="btn operator" onclick="setOperator('-')">−</button>
+        <!-- Buttons -->
+        <div class="buttons">
+            <!-- Row 1 -->
+            <button class="clear" onclick="clearScreen()">AC</button>
+            <button onclick="appendOperator('/')">÷</button>
+            <button onclick="appendOperator('*')">×</button>
+            <button onclick="appendOperator('-')">−</button>
 
-                <button class="btn" onclick="appendNumber(7)">7</button>
-                <button class="btn" onclick="appendNumber(8)">8</button>
-                <button class="btn" onclick="appendNumber(9)">9</button>
-                <button class="btn operator" onclick="setOperator('*')">×</button>
+            <!-- Row 2 -->
+            <button onclick="appendNumber(7)">7</button>
+            <button onclick="appendNumber(8)">8</button>
+            <button onclick="appendNumber(9)">9</button>
+            <button onclick="appendOperator('+')">+</button>
 
-                <button class="btn" onclick="appendNumber(0)">0</button>
-                <button class="btn" onclick="clearScreen()">C</button>
-                <button class="btn" onclick="backspace()">←</button>
-                <button class="btn operator" onclick="setOperator('/')">÷</button>
+            <!-- Row 3 -->
+            <button onclick="appendNumber(4)">4</button>
+            <button onclick="appendNumber(5)">5</button>
+            <button onclick="appendNumber(6)">6</button>
+            <button onclick="backspace()">⌫</button>
 
-                <!-- Equals Button -->
-                <button class="btn equals" onclick="calculate()">=</button>
-            </div>
+            <!-- Row 4 -->
+            <button onclick="appendNumber(1)">1</button>
+            <button onclick="appendNumber(2)">2</button>
+            <button onclick="appendNumber(3)">3</button>
+            <button class="equals" onclick="evaluateExpression()">=</button>
+
+            <!-- Row 5 -->
+            <button onclick="appendNumber(0)" style="grid-column: span 2;">0</button>
+            <button onclick="appendDot()">.</button>
         </div>
     </div>
+    
     <script>
-        let currentNumber = '';
-        let previousNumber = '';
-        let currentOperator = null;
+        const screen = document.getElementById('screen');
+        let expression = '';
 
+        // Append a number to the calculator screen
         function appendNumber(number) {
-            currentNumber += number;
-            updateScreen(currentNumber);
-        }
-
-        function setOperator(operator) {
-            if (currentNumber === '') return;
-            if (previousNumber !== '') {
-                calculate();
+            if (expression === '0') {
+                expression = '';
             }
-            currentOperator = operator;
-            previousNumber = currentNumber;
-            currentNumber = '';
-            updateScreen('');
+            expression += number;
+            screen.innerText = expression;
         }
 
-        function calculate() {
-            let computation;
-            const prev = parseFloat(previousNumber);
-            const current = parseFloat(currentNumber);
-            if (isNaN(prev) || isNaN(current)) return;
-
-            switch (currentOperator) {
-                case '+':
-                    computation = prev + current;
-                    break;
-                case '-':
-                    computation = prev - current;
-                    break;
-                case '*':
-                    computation = prev * current;
-                    break;
-                case '/':
-                    if (current === 0) {
-                        computation = 'Error: Divide by 0';
-                    } else {
-                        computation = prev / current;
-                    }
-                    break;
-                default:
-                    return;
+        // Append an operator to the calculator screen
+        function appendOperator(operator) {
+            if (!isNaN(expression.slice(-1))) {
+                expression += operator;
+                screen.innerText = expression;
             }
-
-            currentNumber = computation.toString();
-            currentOperator = null;
-            previousNumber = '';
-            updateScreen(currentNumber);
         }
 
-        function updateScreen(value) {
-            document.getElementById('result').textContent = value;
+        // Append a decimal point
+        function appendDot() {
+            const lastNumber = expression.split(/[\+\-\*\/]+/).pop();
+            if (!lastNumber.includes('.') && lastNumber !== '') {
+                expression += '.';
+                screen.innerText = expression;
+            }
         }
 
+        // Evaluate the expression
+        function evaluateExpression() {
+            try {
+                const sanitizedExpression = expression.replace(/×/g, '*').replace(/÷/g, '/');
+                const result = eval(sanitizedExpression);
+                expression = result.toString();
+                screen.innerText = expression;
+            } catch {
+                screen.innerText = 'Error';
+                expression = '';
+            }
+        }
+
+        // Clear the calculator screen
         function clearScreen() {
-            currentNumber = '';
-            previousNumber = '';
-            currentOperator = null;
-            updateScreen('');
+            expression = '';
+            screen.innerText = '0';
         }
 
+        // Remove the last character (backspace)
         function backspace() {
-            currentNumber = currentNumber.slice(0, -1);
-            updateScreen(currentNumber);
+            expression = expression.slice(0, -1);
+            screen.innerText = expression || '0';
         }
     </script>
 </body>
