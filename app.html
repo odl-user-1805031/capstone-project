@@ -1,137 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculator App</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background: #f4f4f4;
-        }
-        .calculator {
-            width: 300px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-            background-color: white;
-        }
-        .display {
-            text-align: right;
-            padding: 20px;
-            font-size: 2rem;
-            background: #2d3436;
-            color: white;
-        }
-        .buttons {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1px;
-        }
-        button {
-            font-size: 1.5rem;
-            padding: 15px;
-            cursor: pointer;
-            background: #dfe6e9;
-            border: none;
-            outline: none;
-        }
-        button.operator {
-            background: #fab1a0;
-        }
-        button.clear {
-            background: #81ecec;
-        }
-        button.equal {
-            background: #74b9ff;
-            grid-column: span 2;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web-Based Calculator</title>
+  <style>
+    /* Stylesheet */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .calculator {
+      background-color: #ffffff;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      width: 400px;
+    }
+
+    .display {
+      background-color: #222;
+      color: #fff;
+      font-size: 2.5em;
+      text-align: right;
+      padding: 20px;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      overflow-x: auto;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 2px;
+    }
+
+    .btn {
+      background-color: #f1f1f1;
+      border: none;
+      padding: 20px;
+      font-size: 1.5em;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .btn:hover {
+      background-color: #eeeeee;
+    }
+
+    .btn.equals {
+      grid-column: span 2;
+      background-color: #4caf50;
+      color: #fff;
+    }
+
+    .btn.zero {
+      grid-column: span 2;
+    }
+
+    .btn.equals:hover {
+      background-color: #45a049;
+    }
+
+    .btn:active {
+      transform: scale(0.95);
+    }
+  </style>
 </head>
 <body>
-    <div class="calculator">
-        <div class="display" id="display">0</div>
-        <div class="buttons">
-            <button class="clear">C</button>
-            <button class="operator">/</button>
-            <button class="operator">x</button>
-            <button class="operator">-</button>
-            <button>7</button>
-            <button>8</button>
-            <button>9</button>
-            <button class="operator">+</button>
-            <button>4</button>
-            <button>5</button>
-            <button>6</button>
-            <button>1</button>
-            <button>2</button>
-            <button>3</button>
-            <button>0</button>
-            <button class="equal">=</button>
-        </div>
+  <div class="calculator">
+    <div id="display" class="display">0</div>
+    <div class="buttons">
+      <!-- ROW 1 -->
+      <button class="btn" onclick="clearDisplay()">C</button>
+      <button class="btn" onclick="appendOperator('/')">÷</button>
+      <button class="btn" onclick="appendOperator('*')">×</button>
+      <button class="btn" onclick="backspace()">⌫</button>
+
+      <!-- ROW 2 -->
+      <button class="btn" onclick="appendNumber('7')">7</button>
+      <button class="btn" onclick="appendNumber('8')">8</button>
+      <button class="btn" onclick="appendNumber('9')">9</button>
+      <button class="btn" onclick="appendOperator('-')">−</button>
+
+      <!-- ROW 3 -->
+      <button class="btn" onclick="appendNumber('4')">4</button>
+      <button class="btn" onclick="appendNumber('5')">5</button>
+      <button class="btn" onclick="appendNumber('6')">6</button>
+      <button class="btn" onclick="appendOperator('+')">+</button>
+
+      <!-- ROW 4 -->
+      <button class="btn" onclick="appendNumber('1')">1</button>
+      <button class="btn" onclick="appendNumber('2')">2</button>
+      <button class="btn" onclick="appendNumber('3')">3</button>
+      <button class="btn equals" onclick="calculate()">=</button>
+
+      <!-- ROW 5 -->
+      <button class="btn zero" onclick="appendNumber('0')">0</button>
+      <button class="btn" onclick="appendNumber('.')">.</button>
     </div>
-    <script>
-        const display = document.getElementById('display');
-        const buttons = Array.from(document.querySelectorAll('.buttons button'));
-        let currentNumber = '';
-        let previousNumber = '';
-        let operator = null;
+  </div>
+  <script>
+    // JavaScript Logic
+    let displayValue = "";
 
-        buttons.forEach(button => {
-            button.addEventListener('click', () => {
-                const value = button.textContent;
+    // Append numbers to display
+    function appendNumber(number) {
+      displayValue += number;
+      updateDisplay();
+    }
 
-                if (button.classList.contains('clear')) {
-                    currentNumber = '';
-                    previousNumber = '';
-                    operator = null;
-                    display.textContent = '0';
-                    return;
-                }
+    // Append operators to display
+    function appendOperator(operator) {
+      if (isOperator(displayValue.slice(-1))) return;
+      displayValue += operator;
+      updateDisplay();
+    }
 
-                if (button.classList.contains('operator')) {
-                    operator = value;
-                    previousNumber = currentNumber;
-                    currentNumber = '';
-                    return;
-                }
+    // Clear all input
+    function clearDisplay() {
+      displayValue = "";
+      updateDisplay();
+    }
 
-                if (button.classList.contains('equal')) {
-                    let result;
-                    const prev = parseFloat(previousNumber);
-                    const current = parseFloat(currentNumber);
+    // Delete one character (backspace)
+    function backspace() {
+      displayValue = displayValue.slice(0, -1);
+      updateDisplay();
+    }
 
-                    switch (operator) {
-                        case '+':
-                            result = prev + current;
-                            break;
-                        case '-':
-                            result = prev - current;
-                            break;
-                        case 'x':
-                            result = prev * current;
-                            break;
-                        case '/':
-                            result = prev / current;
-                            break;
-                    }
+    // Calculate result
+    function calculate() {
+      try {
+        if (displayValue.includes('/0')) {
+          updateDisplay("Error: Division by 0");
+          displayValue = "";
+          return;
+        }
+        const result = eval(displayValue);
+        displayValue = result.toString();
+        updateDisplay();
+      } catch (error) {
+        updateDisplay("Error");
+        displayValue = "";
+      }
+    }
 
-                    display.textContent = result;
-                    currentNumber = result;
-                    previousNumber = '';
-                    operator = null;
-                    return;
-                }
+    // Update the display
+    function updateDisplay(value = displayValue) {
+      const displayElement = document.getElementById("display");
+      displayElement.textContent = value || "0";
+    }
 
-                currentNumber += value;
-                display.textContent = currentNumber;
-            });
-        });
-    </script>
+    // Check if character is an operator
+    function isOperator(char) {
+      return ["+", "-", "*", "/"].includes(char);
+    }
+  </script>
 </body>
 </html>
